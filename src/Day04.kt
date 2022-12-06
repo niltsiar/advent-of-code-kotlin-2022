@@ -12,15 +12,9 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         return input.getPairsOfRanges()
-            .map { ranges ->
-                when {
-                    ranges.first.first in ranges.second -> 1
-                    ranges.first.last in ranges.second -> 1
-                    ranges.second.first in ranges.first -> 1
-                    ranges.second.last in ranges.first -> 1
-                    else -> 0
-                }
-            }.sum()
+            .count { ranges ->
+                ranges.first overlaps ranges.second
+            }
     }
 
     // test if implementation meets criteria from the description, like:
@@ -46,3 +40,6 @@ private fun List<String>.getPairsOfRanges(): List<Pair<IntRange, IntRange>> {
     }
 }
 
+private infix fun IntRange.overlaps(other: IntRange): Boolean {
+    return first <= other.last && other.first <= last
+}
